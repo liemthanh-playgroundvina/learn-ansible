@@ -1,0 +1,9 @@
+.idea
+
+# Ansible
+ansible/roles/*/
+!ansible/roles/custom_role/
+ansible/vars/secrets.yml
+**/inventory.ini
+**id_rsa**
+**.log**

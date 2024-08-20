@@ -1,0 +1,22 @@
+- name: Create repo folder
+  file:
+    path: "{{ ansible_user_dir }}/{{ branch_name }}"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0755'
+
+- name: Clone repository with sparse checkout
+  shell: |
+    sleep 5
+    cd {{ ansible_user_dir }}/{{ branch_name }}
+    git clone --no-checkout {{ repo_url }} {{ dest_path }}
+    cd {{ dest_path }}
+    git config core.sparseCheckout true
+    echo "docker/{{ branch_name }}/*" >> .git/info/sparse-checkout
+    echo "Makefile" >> .git/info/sparse-checkout
+    git checkout {{ branch_name }}
+  args:
+    executable: /bin/bash
+  async: 600
+  poll: 5

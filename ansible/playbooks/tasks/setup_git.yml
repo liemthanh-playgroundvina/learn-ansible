@@ -1,0 +1,9 @@
+---
+- name: Set up Git credentials
+  shell: |
+    echo "https://{{ github_username }}:{{ github_password }}@github.com" > {{ ansible_user_dir }}/.git-credentials
+  args:
+    executable: /bin/bash
+
+- name: Configure Git to use credential store
+  shell: git config --global credential.helper store

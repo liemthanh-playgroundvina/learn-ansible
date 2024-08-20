@@ -1,0 +1,22 @@
+---
+- hosts: server
+  gather_facts: yes
+
+  vars:
+    dest_path: "{{ ansible_user_dir }}/{{ branch_name }}/{{ repo_name }}"
+
+  vars_files:
+    - ../vars/secrets.yml
+
+  roles:
+    - role: ../roles/geerlingguy.git
+      become: yes
+
+  tasks:
+    - name: Setup Github
+      import_tasks: tasks/setup_git.yml
+      become_user: "{{ ansible_user }}"
+
+    - name: Clone repository
+      import_tasks: tasks/clone_sparse_repo.yml
+      become_user: "{{ ansible_user }}"

@@ -1,0 +1,46 @@
+---
+- hosts: server
+  become: yes
+  gather_facts: yes
+
+  vars_files:
+    - ../vars/secrets.yml
+
+  pre_tasks:
+    - name: Ensure cron is installed
+      apt:
+        name: cron
+        state: present
+      tags: setup
+
+    - name: Wait for crontab to be available
+      wait_for:
+        path: /usr/bin/crontab
+        timeout: 10
+      when: ansible_facts.os_family == "Debian"
+      tags: setup
+
+  roles:
+    - role: ../roles/geerlingguy.certbot
+      tags: setup
+
+  tasks:
+    - name: Register with Certbot
+      command: >
+        certbot register --agree-tos --email {{ certbot_email }}
+      args:
+        creates: /etc/letsencrypt/accounts
+      tags: setup
+
+    - name: Certbot Accept Domain
+      command: >
+        certbot --nginx -d {{ domain }}
+      args:
+        creates: /etc/letsencrypt/live/{{ domain }}/fullchain.pem
+      notify:
+        - Restart Nginx
+      tags: restart
+
+    - name: Restart Nginx
+      import_tasks: tasks/restart_nginx.yml
+      tags: restart

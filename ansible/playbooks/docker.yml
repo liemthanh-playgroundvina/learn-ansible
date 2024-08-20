@@ -1,0 +1,21 @@
+---
+- hosts: server
+  gather_facts: yes
+
+  vars_files:
+    - ../vars/secrets.yml
+
+  roles:
+    - role: ../roles/nickjj.docker
+      become: yes
+      vars:
+        docker__version: ""
+        docker__compose_v2_version: ""
+        docker__users: "{{ ansible_user }}"
+        docker__registries:
+          - registry_url: "{{ docker_registry_url }}"
+            username: "{{ docker_username }}"
+            password: "{{ docker_password }}"
+            reauthorize: false
+            config_path: "~/.docker/config.json"
+            state: "present"
