@@ -10,7 +10,7 @@ help:
 
 config-server:
 	@cp -n ansible/inventories/$(ENV)/example.inventory.ini ansible/inventories/$(ENV)/inventory.ini
-	@cp -n ansible/vars/example.secrets.yml ansible/vars/secrets
+	@cp -n ansible/vars/example.secrets.yml ansible/vars/secrets.yml
 
 install_requirements:
 	@ansible-galaxy install -r ansible/roles/requirements.yml -p ansible/roles

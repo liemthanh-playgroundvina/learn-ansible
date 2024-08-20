@@ -19,3 +19,11 @@
             reauthorize: false
             config_path: "~/.docker/config.json"
             state: "present"
+
+  tasks:
+    - name: Check Pull Docker image
+      docker_image:
+        name: "{{ docker_registry_url }}/pg/hello-world"
+        tag: latest
+        source: pull
+      become: yes
