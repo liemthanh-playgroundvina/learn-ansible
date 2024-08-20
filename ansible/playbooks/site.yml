@@ -1,6 +1,6 @@
 ---
-#- import_playbook: docker.yml
-#  tags: setup
+- import_playbook: docker.yml
+  tags: setup
 - import_playbook: git.yml
   tags: setup
 - import_playbook: nginx.yml
